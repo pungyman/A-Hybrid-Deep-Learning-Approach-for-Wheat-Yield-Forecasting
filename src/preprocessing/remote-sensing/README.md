@@ -1,15 +1,29 @@
 # NDVI/EVI Extraction from Google Earth Engine
 
-This project extracts NDVI (Normalized Difference Vegetation Index) and EVI (Enhanced Vegetation Index) data for Indian districts using Google Earth Engine and the MOD09Q1 dataset.
+This project extracts NDVI (Normalized Difference Vegetation Index) and EVI (Enhanced Vegetation Index) data for Indian districts using Google Earth Engine and MODIS datasets.
 
 ## Features
 
 - **Automated extraction** of NDVI and EVI time series data
 - **District-level analysis** using official boundary shapefiles
-- **8-day temporal resolution** using MODIS MOD09Q1 surface reflectance data
+- **Multiple dataset support** - MOD09A1 (8-day) and MOD13Q1 (16-day)
 - **Extensible state selection** - easily add more states
 - **CSV output** with comprehensive statistics
 - **Time period**: 2000-2024 (based on data availability)
+
+## Supported Datasets
+
+### MOD09A1 - Surface Reflectance (Manual Computation)
+- **Resolution**: 500m
+- **Temporal**: 8-day composites
+- **Computation**: Manual calculation using spectral bands
+- **Best for**: Research requiring exact formulas, custom index development
+
+### MOD13Q1 - Vegetation Indices (Precomputed) - **Default**
+- **Resolution**: 250m (higher spatial resolution)
+- **Temporal**: 16-day composites
+- **Computation**: Uses NASA's precomputed NDVI and EVI values
+- **Best for**: General monitoring, faster processing, operational use
 
 ## Prerequisites
 
@@ -49,6 +63,18 @@ This will:
    ```
 
 ## Configuration
+
+### Choosing Dataset
+
+Modify the `dataset_type` parameter in `extract_ndvi_evi.py`:
+
+```python
+# For manual computation with full spectral bands
+extractor = NDVIEVIExtractor("shapefiles/DISTRICT_BOUNDARY.shp", dataset_type="MOD09A1")
+
+# For precomputed values with higher resolution (default)
+extractor = NDVIEVIExtractor("shapefiles/DISTRICT_BOUNDARY.shp", dataset_type="MOD13Q1")
+```
 
 ### Adding More States
 
@@ -95,25 +121,36 @@ The script generates two CSV files in the `output/` directory:
   - Less affected by atmospheric conditions and canopy background
 
 ### Dataset Details
-- **Source**: MODIS MOD09Q1 Surface Reflectance (8-day composite)
-- **Spatial Resolution**: 250 meters
+
+#### MOD09A1 (Manual Computation)
+- **Source**: MODIS/061/MOD09A1 Surface Reflectance
+- **Spatial Resolution**: 500 meters
 - **Temporal Resolution**: 8 days
 - **Bands Used**: 
-  - Band 1 (Red): 620-670 nm
-  - Band 2 (NIR): 841-876 nm
-  - Band 3 (Blue): 459-479 nm
+  - Red (620-670 nm)
+  - NIR (841-876 nm)
+  - Blue (459-479 nm)
+
+#### MOD13Q1 (Precomputed) - Default
+- **Source**: MODIS/061/MOD13Q1 Vegetation Indices
+- **Spatial Resolution**: 250 meters
+- **Temporal Resolution**: 16 days
+- **Precomputed**: NDVI and EVI values by NASA
 
 ## File Structure
 
 ```
-remote-sensing/
+ndvi-evi/
 ├── extract_ndvi_evi.py      # Main extraction script
 ├── setup_and_run.py         # Automated setup script
 ├── requirements.txt         # Python dependencies
-├── README.md                # This file
-├── DATASET_USAGE.md         # Available datasets' information
-├── metadata/
-   ├── read_shapefile.py     # Reading and extracting information from the shapefiles
+├── README.md               # This file
+├── DATASET_USAGE.md        # Detailed dataset guide
+├── shapefiles/             # Shapefile directory
+│   └── DISTRICT_BOUNDARY.* # Shapefile components
+├── metadata/               # Utility scripts
+│   └── read_shapefile.py   # Shapefile reading utility
+└── output/                 # Generated CSV files
 ```
 
 ## Troubleshooting
@@ -135,6 +172,7 @@ remote-sensing/
 3. **Memory/Timeout Issues**:
    - Large date ranges may cause timeouts
    - Reduce the date range or process fewer districts at once
+   - Use MOD13Q1 for faster processing
 
 4. **No Data Returned**:
    - Check if the state name exactly matches the shapefile
@@ -145,10 +183,11 @@ remote-sensing/
 1. Check the [Google Earth Engine documentation](https://developers.google.com/earth-engine)
 2. Verify your Earth Engine account has the necessary permissions
 3. Ensure your internet connection is stable for large downloads
+4. See `DATASET_USAGE.md` for detailed dataset information
 
 ## Technical Details
 
-### Calculation Formulas for MOD09A1 Dataset
+### Calculation Formulas
 
 **NDVI**:
 ```
@@ -164,16 +203,17 @@ EVI = 2.5 * (NIR - Red) / (NIR + 6 * Red - 7.5 * Blue + 1)
 
 1. Load district boundaries from shapefile
 2. Filter districts by specified states
-3. Load MOD09Q1 surface reflectance collection
-4. Calculate NDVI and EVI for each image
+3. Load MODIS collection (MOD09A1 or MOD13Q1)
+4. Calculate/extract NDVI and EVI for each image
 5. Extract time series for each district using zonal statistics
 6. Export results to CSV format
 
 ## Performance Notes
 
-- **Processing Time**: Depends on date range and number of districts
+- **Processing Time**: Depends on date range, number of districts, and dataset choice
 - **Rate Limiting**: Small delays added between districts to avoid API limits
 - **Memory Usage**: Optimized for large datasets with batch processing
+- **Dataset Choice**: MOD13Q1 is faster, MOD09A1 provides more control
 
 ## License
 

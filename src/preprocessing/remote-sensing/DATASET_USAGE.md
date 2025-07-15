@@ -1,30 +1,38 @@
 # NDVI/EVI Dataset Usage Guide
 
-This project now supports two different MODIS datasets for NDVI and EVI extraction. Choose the one that best fits your needs.
+This project supports two different MODIS datasets for NDVI and EVI extraction. Choose the one that best fits your needs.
 
 ## Dataset Options
 
 ### 1. MOD09A1 - Manual Computation
 - **Product**: MODIS/Terra Surface Reflectance 8-Day Global 500m
+- **Collection**: MODIS/061/MOD09A1
 - **Resolution**: 500m
 - **Temporal**: 8-day composites
 - **Computation**: Manual calculation using the exact formulas:
   - NDVI = (NIR - Red) / (NIR + Red)
   - EVI = 2.5 × (NIR - Red) / (NIR + 6 × Red - 7.5 × Blue + 1)
 - **Bands Used**: Red (620-670nm), NIR (841-876nm), Blue (459-479nm)
+- **Scale Factor**: 0.0001
+- **Date Range**: 2000-02-24 to present
 - **Advantages**: 
   - More spectral bands available
   - Full control over computation
   - Better for research requiring custom calculations
+  - More frequent temporal data (8-day vs 16-day)
 - **Disadvantages**: 
   - Requires more processing time
   - Larger data volumes
+  - Lower spatial resolution (500m vs 250m)
 
-### 2. MOD13Q1 - Precomputed Values
+### 2. MOD13Q1 - Precomputed Values (Default)
 - **Product**: MODIS/Terra Vegetation Indices 16-Day Global 250m
+- **Collection**: MODIS/061/MOD13Q1
 - **Resolution**: 250m (better spatial resolution)
 - **Temporal**: 16-day composites
 - **Computation**: Uses precomputed NDVI and EVI values
+- **Scale Factor**: 0.0001
+- **Date Range**: 2000-02-18 to present
 - **Advantages**:
   - Faster processing (no computation needed)
   - Higher spatial resolution (250m vs 500m)
@@ -44,30 +52,30 @@ This project now supports two different MODIS datasets for NDVI and EVI extracti
 | Custom index development | MOD09A1 | Access to individual spectral bands |
 | Operational monitoring | MOD13Q1 | Faster processing, reliable results |
 | Time series analysis | MOD13Q1 | Higher spatial resolution, quality flags |
+| High temporal frequency needs | MOD09A1 | 8-day vs 16-day composites |
 
 ## Usage Instructions
 
-### 1. Quick Test (Recommended First Step)
-```bash
-python test_datasets.py
-```
-This will test both datasets with minimal data extraction to verify they work correctly.
+### 1. Basic Usage
+```python
+from extract_ndvi_evi import NDVIEVIExtractor
 
-### 2. Demo Extraction
-```bash
-python demo_extract.py
-```
-Edit the `DATASET_TYPE` variable in the script to choose between "MOD09A1" or "MOD13Q1".
+# For manual computation with full spectral bands
+extractor = NDVIEVIExtractor("shapefiles/DISTRICT_BOUNDARY.shp", dataset_type="MOD09A1")
 
-### 3. Full Extraction
+# For precomputed values with higher resolution (default)
+extractor = NDVIEVIExtractor("shapefiles/DISTRICT_BOUNDARY.shp", dataset_type="MOD13Q1")
+```
+
+### 2. Full Extraction
 ```bash
 python extract_ndvi_evi.py
 ```
-Edit the `DATASET_TYPE` variable in the script to choose your preferred dataset.
+Edit the `dataset_type` parameter in the script to choose your preferred dataset.
 
 ## Configuration
 
-In any of the main scripts (`extract_ndvi_evi.py`, `demo_extract.py`, `test_datasets.py`), simply change:
+In the main script (`extract_ndvi_evi.py`), modify the dataset type:
 
 ```python
 # For manual computation with full spectral bands
@@ -121,6 +129,7 @@ Values are already computed by NASA using optimized algorithms and quality contr
 | Temporal Resolution | 8-day | 16-day |
 | Computation Control | Full | Limited |
 | Quality Control | Manual | Automated |
+| Spectral Bands | Available | Not accessible |
 
 ## Example Output
 
@@ -140,21 +149,22 @@ date,year,month,day,district,state,ndvi,evi
 2. **Slow processing**: Try MOD13Q1 for faster results
 3. **Memory errors**: Use chunked processing or reduce date range
 4. **Authentication errors**: Run `earthengine authenticate`
+5. **Dataset not found**: Ensure you're using the correct dataset name ("MOD09A1" or "MOD13Q1")
 
 ### Getting Help
 
-1. Run the test script first: `python test_datasets.py`
-2. Check the logs for specific error messages
-3. Verify your Google Earth Engine project is set up correctly
-4. Ensure you have the required dependencies installed
+1. Check the logs for specific error messages
+2. Verify your Google Earth Engine project is set up correctly
+3. Ensure you have the required dependencies installed
+4. Check the README.md for basic setup instructions
 
 ## Best Practices
 
-1. **Start with testing**: Always run `test_datasets.py` first
-2. **Use demos**: Try `demo_extract.py` before full extraction
-3. **Choose based on needs**: MOD13Q1 for speed, MOD09A1 for research
-4. **Monitor resources**: Both datasets require stable internet and adequate disk space
-5. **Save intermediate results**: Use chunked processing for large extractions
+1. **Start with MOD13Q1**: Use the default dataset for most applications
+2. **Choose based on needs**: MOD13Q1 for speed, MOD09A1 for research
+3. **Monitor resources**: Both datasets require stable internet and adequate disk space
+4. **Use appropriate date ranges**: Check dataset availability dates
+5. **Test with small areas first**: Verify your setup before large extractions
 
 ## Data Citations
 
