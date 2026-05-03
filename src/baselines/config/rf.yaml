@@ -1,0 +1,42 @@
+data:
+  base_path: "../../../data/datasets/rf_flat"
+  train_file: train_rf_flat.csv
+  val_file: val_rf_flat.csv
+  test_file: test_rf_flat.csv
+
+reproducibility:
+  seed: 42
+  num_runs: 5
+
+optimization:
+  study_name: rf_baseline
+  hpo_dir: "../../../experiments/hpo"
+  n_trials: 200
+  timeout_hours: 4
+
+  hparam_search_space:
+    n_estimators:
+      type: int
+      low: 200
+      high: 1500
+
+    max_depth:
+      type: categorical
+      choices: [null, 5, 10, 20, 30]
+
+    min_samples_split:
+      type: int
+      low: 2
+      high: 20
+
+    min_samples_leaf:
+      type: int
+      low: 1
+      high: 10
+
+    max_features:
+      type: categorical
+      choices: ["sqrt", "log2", 0.5, 1.0]
+
+output:
+  model_save_dir: "../../rnn/saved_models"

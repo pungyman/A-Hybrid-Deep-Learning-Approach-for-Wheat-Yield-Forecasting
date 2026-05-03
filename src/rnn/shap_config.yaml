@@ -1,0 +1,43 @@
+dataset_dir: ../../data/datasets/final
+model_metadata_path: saved_models/cnn_bilstm_self_attn/model_20251018_064239_metadata.yaml
+
+n_background_samples: 200
+n_test_samples: 545
+
+temporal_feature_names:
+  - 'T2M_MAX'
+  - 'T2M_MIN'
+  - 'T2M'
+  - 'PRECTOTCORR'
+  - 'RH2M'
+  - 'ALLSKY_SFC_SW_DWN'
+  - 'WS10M'
+  - 'QV2M'
+  - 'PS'
+  - 'max_vpd'
+  - 'min_vpd'
+  - 'NDVI'
+  - 'EVI'
+
+static_feature_name: 'past_yield'
+
+soil_feature_names:
+  - 'bdod'
+  - 'cec'
+  - 'clay'
+  - 'nitrogen'
+  - 'phh2o'
+  - 'sand'
+  - 'silt'
+  - 'soc'
+
+soil_depth_names:
+  - '0-5cm'
+  - '5-15cm'
+  - '15-30cm'
+  - '30-60cm'
+  - '60-100cm'
+  - '100-200cm'
+
+output_dir: 'shap_analysis'
+paper_figures_dir: '../../paper_revision/figures'

@@ -1,0 +1,67 @@
+data:
+  base_path: "../../../data/datasets/rf_flat"
+  train_file: train_rf_flat.csv
+  val_file: val_rf_flat.csv
+  test_file: test_rf_flat.csv
+
+reproducibility:
+  seed: 42
+  num_runs: 5
+
+optimization:
+  study_name: lgbm_baseline
+  hpo_dir: "../../../experiments/hpo"
+  n_trials: 200
+  timeout_hours: 4
+
+  hparam_search_space:
+    n_estimators:
+      type: int
+      low: 200
+      high: 2000
+
+    learning_rate:
+      type: loguniform
+      low: 1.0e-3
+      high: 3.0e-1
+
+    num_leaves:
+      type: int
+      low: 15
+      high: 255
+
+    min_child_samples:
+      type: int
+      low: 5
+      high: 100
+
+    min_split_gain:
+      type: float
+      low: 0.0
+      high: 0.5
+
+    subsample:
+      type: float
+      low: 0.6
+      high: 1.0
+
+    colsample_bytree:
+      type: float
+      low: 0.5
+      high: 1.0
+
+    reg_alpha:
+      type: loguniform
+      low: 1.0e-8
+      high: 1.0
+
+    reg_lambda:
+      type: loguniform
+      low: 1.0e-8
+      high: 1.0
+
+training:
+  early_stopping_rounds: 50
+
+output:
+  model_save_dir: "../../rnn/saved_models"

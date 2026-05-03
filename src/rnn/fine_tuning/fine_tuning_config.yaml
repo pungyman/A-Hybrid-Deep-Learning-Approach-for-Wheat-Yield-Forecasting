@@ -1,0 +1,44 @@
+# 1. Information about the model to be fine-tuned
+model_to_finetune:
+  path_to_metadata: '../saved_models/model_20251001_150357_metadata.yaml'
+
+# 2. Data configuration for fine-tuning
+data:
+  base_path: "../../../data/datasets/cnn_rnn/1"
+  train_file: train.csv
+  val_file: val.csv
+  test_file: test.csv
+  state_for_finetuning: 'PUNJAB'
+
+# 3. Training configuration for fine-tuning
+training:
+  n_epochs: 50
+  early_stopping_patience: 15
+  loss: huber # can be 'huber', 'l1', or 'l2'
+  validation_loss: 'l1' # can be 'l1' or 'l2' or null (if the same criterion as training is to be used)
+
+# 4. Fine-tuning hyperparameters (found via HPO)
+hyperparameters:
+  learning_rate: 6.121827407467068e-05
+  weight_decay: 8.180233044281568e-06
+  rnn_dropout_prob: 0.14503544917808495
+  fc_dropout_prob: 0.4366968549858743
+  huber_delta: 1014.6109123963649
+
+# 5. Dataloader configuration
+dataloader:
+  batch_size: 64
+  num_workers: 0
+  pin_memory: false
+  persistent_workers: false
+  prefetch_factor: null
+  drop_last_train: true
+
+# 6. Reproducibility
+reproducibility:
+  seed: 42
+  deterministic: false
+
+# 7. Output configuration
+output:
+  model_save_dir: '../saved_models/fine_tuned'

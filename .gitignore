@@ -1,0 +1,95 @@
+# Internal paper and editor artifacts
+paper_revision/
+manuscript_LaTeX/
+.cursor/
+manuscript_overleaf.zip
+
+# Data, models, and generated outputs
+data/datasets/
+data/district_boundary_data/
+data/remote_sensing_data/
+data/processed/
+data/soilgrids/downloaded_data_wcs/
+experiments/hpo/
+src/rnn/saved_models/
+src/rf/
+analysis_output/
+shap_analysis/
+
+# Binary files and data exports
+*.csv
+*.txt
+!requirements.txt
+*.pt
+*.pth
+*.png
+*.jpg
+*.jpeg
+*.pdf
+*.zip
+*.db
+*.sqlite
+*.xlsx
+*.docx
+*.joblib
+*.pkl
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Jupyter notebooks
+*.ipynb
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# PyCharm
+.idea/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# PyInstaller
+*.manifest
+*.spec
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.out
+*.run.xml
+*.synctex.gz

@@ -1,0 +1,62 @@
+data:
+  base_path: "../../../data/datasets/rf_flat"
+  train_file: train_rf_flat.csv
+  val_file: val_rf_flat.csv
+  test_file: test_rf_flat.csv
+
+reproducibility:
+  seed: 42
+  num_runs: 5
+
+optimization:
+  study_name: xgb_baseline
+  hpo_dir: "../../../experiments/hpo"
+  n_trials: 200
+  timeout_hours: 4
+
+  hparam_search_space:
+    n_estimators:
+      type: int
+      low: 200
+      high: 2000
+
+    learning_rate:
+      type: loguniform
+      low: 1.0e-3
+      high: 3.0e-1
+
+    max_depth:
+      type: int
+      low: 3
+      high: 12
+
+    min_child_weight:
+      type: int
+      low: 1
+      high: 20
+
+    subsample:
+      type: float
+      low: 0.6
+      high: 1.0
+
+    colsample_bytree:
+      type: float
+      low: 0.5
+      high: 1.0
+
+    reg_alpha:
+      type: loguniform
+      low: 1.0e-8
+      high: 1.0
+
+    reg_lambda:
+      type: loguniform
+      low: 1.0e-8
+      high: 1.0
+
+training:
+  early_stopping_rounds: 50
+
+output:
+  model_save_dir: "../../rnn/saved_models"

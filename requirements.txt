@@ -1,0 +1,25 @@
+# Core ML/DS libraries
+pandas
+numpy
+scikit-learn
+matplotlib
+
+# Deep Learning
+torch
+
+# Geo-spatial data
+geopandas
+earthengine-api
+
+# Tree-based models
+xgboost
+lightgbm
+joblib
+
+# Experimentation and configuration
+optuna
+pyyaml
+tqdm
+
+# Interpretability
+shap
